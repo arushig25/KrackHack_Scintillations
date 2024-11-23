@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+	
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url("https://images.unsplash.com/photo-1518843875459-f738682238a6?q=80&w=2042&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        header {
+            background-color: rgb(0, 0, 0); /* Set background to black with transparency */
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        section {
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.7); /* Set background to black with transparency */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #fff; /* Set text color to white */
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.7); /* Set background to black with transparency */
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        input[type="text", color="black"],
+        button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+            box-sizing: border-box;
+            color: #fff; /* Set text color to white */
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Nutrition Tracker</h1>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <!-- Food Entry Form -->
+        <section>
+            <h2>Food Entry</h2>
+            <label for="foodName">Food Name:</label>
+            <input type="text" id="foodName" placeholder="Enter food name">
+            <button onclick="addFoodEntry()">Add Entry</button>
+        </section>
+
+        <!-- Daily Report -->
+        <section>
+            <h2>Daily Report</h2>
+            <p id="totalIntake">Total Intake: Protein: 0g, Fats: 0g, Carbs: 0g</p>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+   
+
+    <!-- JavaScript for Nutrition Tracking -->
+    <script>
+        let totalProtein = 0;
+        let totalFats = 0;
+        let totalCarbs = 0;
+
+        // Predefined list of food items with their nutritional values
+        const foodItemList = [
+            { name: 'Apple', protein: 0.5, fats: 0.2, carbs: 25 },
+            { name: 'Banana', protein: 1.3, fats: 0.3, carbs: 27 },
+            // Add more items as needed
+        ];
+
+        function addFoodEntry() {
+            const foodName = document.getElementById('foodName').value.trim().toLowerCase();
+            const selectedFood = foodItemList.find(item => item.name.toLowerCase() === foodName);
+
+            if (selectedFood) {
+                // Food item found in the predefined list
+                totalProtein += selectedFood.protein;
+                totalFats += selectedFood.fats;
+                totalCarbs += selectedFood.carbs;
+            } else {
+                // Food item not found, add the entered values to the list
+                const protein = parseFloat(prompt(Enter protein value for ${foodName}:) || 0);
+                const fats = parseFloat(prompt(Enter fats value for ${foodName}:) || 0);
+                const carbs = parseFloat(prompt(Enter carbohydrate value for ${foodName}:) || 0);
+
+                // Add the new item to the list
+                foodItemList.push({ name: foodName, protein: protein, fats: fats, carbs: carbs });
+
+                // Update the totals
+                totalProtein += protein;
+                totalFats += fats;
+                totalCarbs += carbs;
+            }
+
+            updateDailyReport();
+            clearForm();
+        }
+
+        function updateDailyReport() {
+            const totalIntakeElement = document.getElementById('totalIntake');
+            totalIntakeElement.textContent = Total Intake: Protein: ${totalProtein}g, Fats: ${totalFats}g, Carbs: ${totalCarbs}g;
+        }
+
+        function clearForm() {
+            document.getElementById('foodName').value = '';
+        }
+    </script>
+
+</body>
+</html>

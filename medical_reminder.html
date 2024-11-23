@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminder</title>
+    <style>
+        body {background-image:url("https://sickday.com/wp-content/uploads/2023/03/pain-scaled.jpg");
+            background-size: cover;    
+            }
+        h1 {color:rgb(255, 0, 128)}
+        h2 {color:brown}
+        p{color:black;font-size:120%; }
+    </style>
+
+</head>
+<body>
+    <h1><u>Medicine Reminder</u></h1>
+    <marquee behaviour="slide" direction ="right" scrollamount="5">Take Your Medicines, Set an Alarm</marquee>
+
+    <p><b>We'll ensure you have taken your medicine</b></p>
+    <p>Want to set off the alarm...</p>
+    <p>Then upload a photo of you taking your pills</p>
+    <p><b>And heyy...don't cheat. After all, it is for your health</b></p>
+    <p><br>Get Well Soon !! </p>
+    <!-- Form to input medicine name and dosage -->
+    <form id="medicineForm">
+        <label for="medicineName">Medicine Name:</label>
+        <input type="text" id="medicineName" name="medicineName" required>
+        <label for="alarmTime">Alarm Time:</label>
+        <input type="time" id="alarmTime" name="alarmTime" required>
+        <label for="courseDays">Course Days:</label>
+        <input type="number" id="courseDays" name="courseDays" min="1" required>
+        <button type="submit">Set Reminder</button>
+    </form>
+
+    <!-- Alarm status area -->
+    <div id="alarmStatus"></div>
+
+    <!-- Audio element for beep sound -->
+    <audio id="beepSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" ></audio>
+
+    <!-- Input for uploading picture -->
+    <input type="file" id="medicinePictureInput" accept="image/*">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        let alarmTimeout; // Variable to store the timeout for the alarm
+        let intervalTimer; // Variable to store the interval timer for the beep sound
+        let medicineName; // Variable to store the medicine name
+        const beepSound = document.getElementById('beepSound'); // Get the audio element
+
+        // Function to set alarm for the specified time each day
+        function setAlarm(alarmTime, courseDays) {
+            const alarmStatusElement = $('#alarmStatus');
+            alarmStatusElement.text(Alarm set for ${alarmTime} for ${courseDays} days);
+
+            const currentTime = new Date();
+            const alarmDate = new Date(currentTime);
+            alarmDate.setHours(alarmTime.split(':')[0]);
+            alarmDate.setMinutes(alarmTime.split(':')[1]);
+            alarmDate.setSeconds(0);
+
+            const timeDifference = alarmDate.getTime() - currentTime.getTime();
+
+            // Calculate milliseconds until next alarm time
+            let millisecondsUntilAlarm = timeDifference % (24 * 60 * 60 * 1000);
+            if (millisecondsUntilAlarm < 0) {
+                millisecondsUntilAlarm += 24 * 60 * 60 * 1000;
+            }
+
+            // Set timeout to start the alarm at the exact time
+            alarmTimeout = setTimeout(() => {
+                startAlarm(courseDays, alarmTime);
+            }, millisecondsUntilAlarm);
+        }
+
+        // Function to start the alarm
+        function startAlarm(courseDays, alarmTime) {
+            const currentDate = new Date();
+
+            alert(Time to take ${medicineName}!,1000); // Generate alert with medicine name
+            playBeepSound(); // Play beep sound
+
+            // Set interval to play beep sound
+            intervalTimer = setInterval(() => {
+                playBeepSound();
+            }, 1000);
+
+            if (courseDays === 1) {
+                clearInterval(intervalTimer); // Stop the beep sound if it's the last day
+            }
+
+            // Check if it's the last day of the course
+            if (courseDays === 1) {
+                clearInterval(intervalTimer); // Stop the beep sound if it's the last day
+            } else {
+                // Set the timeout for the next day's alarm
+                const nextAlarmDate = new Date(currentDate);
+                nextAlarmDate.setDate(nextAlarmDate.getDate() + 1);
+                nextAlarmDate.setHours(alarmTime.split(':')[0]);
+                nextAlarmDate.setMinutes(alarmTime.split(':')[1]);
+                nextAlarmDate.setSeconds(0);
+                const millisecondsUntilNextAlarm = nextAlarmDate.getTime() - currentDate.getTime();
+                alarmTimeout = setTimeout(() => {
+                    startAlarm(courseDays - 1, alarmTime);
+                }, millisecondsUntilNextAlarm);
+            }
+        }
+
+        // Function to handle medicine form submission
+        $('#medicineForm').submit(function(event) {
+            event.preventDefault();
+            medicineName = $('#medicineName').val(); // Store the medicine name
+            const alarmTime = $('#alarmTime').val();
+            const courseDays = parseInt($('#courseDays').val());
+
+            // Validate course days input
+            if (isNaN(courseDays) || courseDays <= 0) {
+                alert('Please enter a valid number of course days (greater than 0)');
+                return;
+            }
+
+            // Set alarm for the specified time each day
+            setAlarm(alarmTime, courseDays);
+        });
+        
+
+        
+        // Event listener for uploading picture
+        $('#medicinePictureInput').change(function() {
+            clearInterval(intervalTimer); // Stop the beep sound
+            clearTimeout(alarmTimeout); // Stop the alarm
+            stopBeepSound(); // Stop the audio
+            const picture = $(this)[0].files[0];
+            if (picture) {
+                // Here you would handle the picture upload, e.g., send it to the server for processing
+                alert('Picture uploaded! Alarm stopped.');
+                $('#alarmStatus').text(''); // Reset the alarm status display
+            }
+        });
+
+        // Function to play beep sound
+        function playBeepSound() {
+            beepSound.play();
+        }
+
+        // Function to stop beep sound
+        function stopBeepSound() {
+            beepSound.pause();
+            beepSound.currentTime = 0; // Reset audio to beginning
+        }
+    </script>
+</body>
+</html>

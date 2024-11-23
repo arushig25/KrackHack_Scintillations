@@ -1,0 +1,100 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://blog.iafstore.com/static/img/posts/image/1nb8mayshseg2v4b5usj.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="timer">Set Timer (in minutes):</label>
+        <input type="number" id="timer" min="1" step="1">
+        <button id="startButton">Start Timer</button>
+    </div>
+
+    <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+    <script>
+        var audio = document.getElementById('audioPlayer');
+        var startButton = document.getElementById('startButton');
+
+        function startTimer() {
+            var timerInput = document.getElementById('timer');
+            var minutes = parseInt(timerInput.value);
+
+            if (isNaN(minutes) || minutes <= 0) {
+                alert("Please enter a valid timer value.");
+                return;
+            }
+
+            // Convert minutes to milliseconds
+            var milliseconds = minutes * 60 * 1000;
+
+            // Play meditation music
+            audio.play();
+
+            // After the timer expires, stop the audio
+            setTimeout(function() {
+                audio.pause();
+            }, milliseconds);
+
+            alert("Timer set for " + minutes + " minutes. Meditation music will play until the timer ends.");
+        }
+
+        startButton.addEventListener('click', startTimer);
+    </script>
+</body>
+</html>

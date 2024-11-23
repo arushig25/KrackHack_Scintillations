@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://motionarray.imgix.net/preview-360786EJrUkz0GA_0014.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #555;
+        }
+
+        /* New styles for diet and yoga plans */
+        #diet-plan,
+        #yoga-plan,
+        #workout-plan {
+            margin-top: 20px;
+            display: none;
+        }
+
+        #diet-plan p,
+        #yoga-plan p,
+        #workout-plan p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #diet-plan ul,
+        #workout-plan ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #diet-plan ul li,
+        #workout-plan ul li {
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BMI Calculator</h1>
+        <div>
+            <label for="height">Height (m):</label>
+            <input type="number" id="height" step="0.01">
+        </div>
+        <div>
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" step="0.01">
+        </div>
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div id="result"></div>
+        <div id="diet-plan"></div>
+        <div id="yoga-plan"></div>
+        <div id="workout-plan"></div>
+    </div>
+
+    <script>
+        // JavaScript code
+        function calculateBMI() {
+            var height = parseFloat(document.getElementById('height').value);
+            var weight = parseFloat(document.getElementById('weight').value);
+
+            if (isNaN(height) || isNaN(weight)) {
+                alert("Please enter valid height and weight.");
+                return;
+            }
+
+            var bmi = weight / (height * height);
+
+            var result = document.getElementById('result');
+            result.innerHTML = "Your BMI is: " + bmi.toFixed(2);
+
+            if (bmi < 18.5) {
+                result.innerHTML += "<br>You are underweight.";
+                document.getElementById('diet-plan').innerHTML = "<p>Diet Plan:</p><ul><li>Breakfast: Oatmeal with fruits</li><li>Lunch: Grilled chicken salad</li><li>Dinner: Brown rice with vegetables</li></ul>";
+                document.getElementById('yoga-plan').innerHTML = "<p>Yoga Plan: Focus on strength-building exercises like plank, warrior poses, and sun salutations.</p>";
+                document.getElementById('workout-plan').innerHTML = "<p>Workout Plan: Start with light cardio such as walking or cycling for 20-30 minutes, then include bodyweight exercises like push-ups, squats, and lunges for 20-30 minutes.</p>";
+            } else if (bmi >= 18.5 && bmi < 25) {
+                result.innerHTML += "<br>You are in the normal weight range.";
+                document.getElementById('diet-plan').innerHTML = "<p>Diet Plan:</p><ul><li>Breakfast: Whole grain toast with avocado</li><li>Lunch: Quinoa salad with grilled shrimp</li><li>Dinner: Baked salmon with sweet potatoes</li></ul>";
+                document.getElementById('yoga-plan').innerHTML = "<p>Yoga Plan: Practice a mix of flexibility, strength, and relaxation poses such as downward dog, tree pose, and child's pose.</p>";
+                document.getElementById('workout-plan').innerHTML = "<p>Workout Plan: Include a mix of cardio, strength training, and flexibility exercises. Examples include running, weight lifting, and yoga.</p>";
+            } else if (bmi >= 25 && bmi < 30) {
+                result.innerHTML += "<br>You are overweight.";
+                document.getElementById('diet-plan').innerHTML = "<p>Diet Plan:</p><ul><li>Breakfast: Greek yogurt with berries</li><li>Lunch: Turkey wrap with vegetables</li><li>Dinner: Stir-fried tofu with broccoli and brown rice</li></ul>";
+                document.getElementById('yoga-plan').innerHTML = "<p>Yoga Plan: Focus on cardio and fat-burning exercises like brisk walking, jogging, and cycling along with yoga poses for weight loss.</p>";
+                document.getElementById('workout-plan').innerHTML = "<p>Workout Plan: Increase intensity and duration of cardio exercises. Incorporate strength training exercises to build muscle and boost metabolism.</p>";
+            } else {
+                result.innerHTML += "<br>You are obese.";
+                document.getElementById('diet-plan').innerHTML = "<p>Diet Plan:</p><ul><li>Breakfast: Spinach and feta omelette</li><li>Lunch: Grilled vegetable wrap</li><li>Dinner: Lentil soup with whole grain bread</li></ul>";
+                document.getElementById('yoga-plan').innerHTML = "<p>Yoga Plan: Incorporate a mix of cardio, strength training, and yoga exercises under the guidance of a fitness instructor.</p>";
+                document.getElementById('workout-plan').innerHTML = "<p>Workout Plan: Consult with a fitness trainer to create a personalized exercise routine focusing on weight loss and improving overall fitness.</p>";
+            }
+
+            // Show diet, yoga, and workout plans
+            document.getElementById('diet-plan').style.display = 'block';
+            document.getElementById('yoga-plan').style.display = 'block';
+            document.getElementById('workout-plan').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Demo</title>
+    <style>
+.container {
+    max-width: 600px;
+    text-align: center;
+    margin:auto;
+    padding-left:15px;
+    padding-right:15px;
+    background-color:rgb(250,250,250,0.4);
+                border-radius:30px;
+                overflow:auto;
+                font-family:serif;
+                font-size: large;
+}
+div h1{
+    text-decoration: underline;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+p button {
+            padding: 5px;
+            margin-left: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            border-radius: 50%; /* Make button circular */
+            border: 2px solid #000; /* Add border */
+            transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+        }
+
+        button:hover {
+            background-color: #ccc; /* Change background color on hover */
+            border-color: #999; /* Change border color on hover */
+        }
+
+        .edit-icon {
+            color: #000; /* Set icon color */
+        }
+        body{
+            background-image: url("https://w0.peakpx.com/wallpaper/39/985/HD-wallpaper-water-background-aesthetic-ultra-elements-water-blue-sunshine-background.jpg");
+            background-size:cover;
+            background-repeat:no-repeat;
+            background-attachment:fixed;
+            
+        }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
+    <!--<input type="number" id="intervalInput" value="10">
+    <button id="startBtn">Start Notifications</button>-->
+
+
+    <div class="container">
+        <h1>Water Consumption Tracker</h1>
+        <p>Total Water Requirement: <span id="totalRequirement">2000 ml</span> <button id="editRequirementBtn"><i class="fas fa-pencil-alt edit-icon"></i></button></p>
+        <p>Water Consumed: <span id="waterConsumed">0 ml</span></p>
+        <p>Amount of water: <span id="waterToDrink">200 ml</span> <button id="editWaterToDrinkBtn"><i class="fas fa-pencil-alt edit-icon"></i></button></p>
+        <button id="drinkButton">Drink Water</button>
+        <br>
+        <label for="startTimeInput">Notification Start Time:</label>
+        <input type="time" id="startTimeInput">
+        <br>
+        <label for="endTimeInput">Notification End Time:</label>
+        <input type="time" id="endTimeInput">
+    </div>
+    <center><button id="snoozeBtn">Snooze Notifications</button></center>
+
+    <script>
+    var notcot=0;
+    var s='Your Water reminder';
+    var sheading='Time to take water';
+    var heading1='Hey! take a break and have some water';
+    var head2="8 glasses of water a day keeps dehydration away";
+    var head3="WaTeR";
+    var head4='Time to take water';
+    var head5='GO, GET UP AND DON\'T COME BACK UNTIL YOU HAVE WATER!';
+    var head6="Drink water like it\'s your job... because it kind of is. #StayHydrated";
+    var head7="You're not a cactus. Stay hydrated!";
+    
+    // Function to generate a random integer within a specified range
+function getRandomInt(min, max) {
+    min = Math.ceil(min); // Round up the minimum value
+    max = Math.floor(max); // Round down the maximum value
+    return Math.floor(Math.random() * (max - min + 1)) + min; // Return a random integer
+}
+
+// Generate a random number between 1 and 10
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    let notificationInterval1;
+    let notificationInterval2;
+    let notificationInterval3;
+    let notificationInterval4;
+    let notificationInterval5;
+    let notificationInterval6;
+    let notificationInterval7;
+    let totalRequirement = parseInt(document.getElementById('totalRequirement').textContent);
+    const startBtn = document.getElementById('startBtn');
+    const snoozeBtn = document.getElementById('snoozeBtn');
+    const intervalInput = document.getElementById('intervalInput');
+
+    // Function to show browser-based notification
+    function showBrowserNotification() {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        } else {
+            var notification = new Notification(s, {
+                body: sheading, icon: 'https://cdn-icons-png.flaticon.com/128/3248/3248369.png'
+            });
+            notcot++;
+            var ran = getRandomInt(1, 7);
+            if (ran ==1){
+                sheading=heading1;
+            }else if(ran==2){
+                sheading=head2;
+            }else if(ran==3){
+                sheading=head3;
+            }else if(ran==4){
+                sheading=head4;               
+            }else if(ran==5){
+                sheading=head5;
+            }else if(ran==6){
+                sheading=head6;
+            }else{
+                sheading=head7;
+            }
+            
+            // Close the notification after 5 seconds
+            setTimeout(function() {
+                notification.close();
+            }, 3000);
+        }
+    }
+    const currentTime = new Date();
+    const startTimeParts = startTimeInput.value.split(':');
+    const endTimeParts = endTimeInput.value.split(':');
+
+    const startHour = parseInt(startTimeParts[0]);
+    const startMinute = parseInt(startTimeParts[1]);
+
+    const endHour = parseInt(endTimeParts[0]);
+    const endMinute = parseInt(endTimeParts[1]);
+
+    const startDateTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), startHour, startMinute);
+    const endDateTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), endHour, endMinute);
+    if (currentTime >= startDateTime && currentTime <= endDateTime) {
+        // Current time is within the specified start and end time range
+            startNotifications();
+            // Start after 1 minute of the specified start time
+    }
+        // Current time is outside the specified start and end time range
+    
+    // Function to start automatic notifications
+    function startNotifications() {
+        //const intervalSeconds = parseInt(intervalInput.value) * 1000; // Convert seconds to milliseconds
+        
+        notificationInterval1 = setInterval(function() {
+            showBrowserNotification();
+        }, 60*60*1000);
+        notificationInterval2 = setInterval(function() {
+            showBrowserNotification();
+        }, 3601*1000);
+        notificationInterval3 = setInterval(function() {
+            showBrowserNotification();
+        }, 3602*1000);
+        notificationInterval4 = setInterval(function() {
+            showBrowserNotification();
+        }, 3603*1000);
+        notificationInterval5 = setInterval(function() {
+            showBrowserNotification();
+        }, 3604*1000);
+        notificationInterval6 = setInterval(function() {
+            showBrowserNotification();
+        }, 3605*1000);
+        notificationInterval7 = setInterval(function() {
+            showBrowserNotification();
+        }, 3606*1000);
+    }
+
+    // Function to snooze automatic notifications
+    function snoozeNotifications() {
+        clearInterval(notificationInterval1);
+        clearInterval(notificationInterval2);
+        clearInterval(notificationInterval3);
+        clearInterval(notificationInterval4);
+        clearInterval(notificationInterval5);
+        clearInterval(notificationInterval6);
+        clearInterval(notificationInterval7);
+        const timeToResume = prompt("Enter the time (in minutes) after which reminder should resume:");
+        if (timeToResume !== null) {
+            setTimeout(startNotifications, parseInt(timeToResume) * 1000*60); // Convert seconds to milliseconds
+        }
+    }
+    function stopNotifications() {
+        clearInterval(notificationInterval);
+    }
+
+    // Event listener for start button
+   // startBtn.addEventListener('click', function() {
+     //   startNotifications();
+    //});
+    // Event listener for snooze button
+    snoozeBtn.addEventListener('click', function() {
+        snoozeNotifications();
+    });
+     // Event listener for edit requirement button
+    editRequirementBtn.addEventListener('click', function () {
+        var newRequirement = prompt("Enter the new total water requirement (in ml):");
+        if (newRequirement !== null) {
+            if (newRequirement === ""|| newRequirement<=0) {
+                alert("Please enter a valid value.");
+            } else {
+                totalRequirement = parseInt(newRequirement);
+                document.getElementById('totalRequirement').textContent = newRequirement + " ml";
+            }
+        }
+    });
+    // Event listener for edit water to drink button
+    editWaterToDrinkBtn.addEventListener('click', function () {
+            var newWaterToDrink = prompt("Enter the new amount of water to drink at a time (in ml):");
+            if (newWaterToDrink !== null) {
+                if (newWaterToDrink === "" || newWaterToDrink<=0) {
+                    alert("Please enter a valid value.");
+                } else {
+                    document.getElementById('waterToDrink').textContent = newWaterToDrink + " ml";
+                }
+            }
+    });
+    const drinkButton = document.getElementById('drinkButton');
+    //var totalRequirementElement = document.getElementById('totalRequirement');
+    const waterConsumedElement = document.getElementById('waterConsumed');
+    //let totalRequirement = parseInt(document.getElementById('totalRequirement').textContent);
+    let waterConsumed = 0; // Initial water consumed
+
+    // Update the display with current water consumed and remaining requirement
+    function updateDisplay() {
+        //totalRequirementElement.textContent = totalRequirement + " ml";
+        waterConsumedElement.textContent = waterConsumed + " ml";
+    }
+    // Function to handle drinking water
+    function drinkWater(amount) {
+        waterConsumed += amount;
+        if(waterConsumed>=totalRequirement){
+            totalDoneNoti();
+        }
+        updateDisplay();
+        showdoneNotification(amount);
+        stopNotifications();    
+    }
+    function showdoneNotification(amount) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        } else {
+            var notification = new Notification('Water Consumption', {
+                body: 'You have consumed ' + amount + ' ml of water.'
+            });
+            
+            // Close the notification after 5 seconds
+            setTimeout(function() {
+                notification.close();
+            }, 20*1000);
+        }
+    }
+    function totalDoneNoti() {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        } else {
+            var notification = new Notification('Total Requirement Met', {
+                body: 'Bravo! You have taken required water today!\n Click to set a new goal'
+            });
+            
+            // Close the notification after 5 seconds
+            setTimeout(function() {
+                notification.close();
+            }, 20*1000);
+        }
+    }
+    // Event listener for drink button
+    drinkButton.addEventListener('click', function() {
+        drinkWater(parseInt(document.getElementById('waterToDrink').textContent)); // Drink water specified in waterToDrink span
+    });
+
+    // Update initial display
+    updateDisplay();
+});
+
+
+</script>
+</body>
+</html>
+
